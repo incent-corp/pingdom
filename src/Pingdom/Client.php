@@ -143,13 +143,19 @@ class Client
 	 * @param string $resolution
 	 * @return array
 	 */
-	public function getPerformanceSummary($checkId, $resolution = 'hour')
+	public function getPerformanceSummary($checkId, $from = null, $to = null, $resolution = 'hour')
 	{
 		$client = new \Guzzle\Service\Client('https://api.pingdom.com/api/2.0');
 
 		/** @var $request \Guzzle\Http\Message\Request */
 		$request = $client->get('summary.performance/' . $checkId, array('App-Key' => $this->token));
 		$request->setAuth($this->username, $this->password);
+		if ($from) {
+		    $request->getQuery()->set('from', $from);
+		}
+		if ($to) {
+		    $request->getQuery()->set('to', $to);
+		}
 		$request->getQuery()->set('resolution', $resolution);
 		$request->getQuery()->set('includeuptime', 'true');
 
